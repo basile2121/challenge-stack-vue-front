@@ -9,21 +9,21 @@
         v-model="first"
         color="primary"
         label="Prénom"
-        variant="underlined"
+        variant="outlined"
       ></v-text-field>
 
       <v-text-field
         v-model="last"
         color="primary"
         label="Nom"
-        variant="underlined"
+        variant="outlined"
       ></v-text-field>
 
       <v-text-field
         v-model="last"
         color="primary"
         label="Date de naissance"
-        variant="underlined"
+        variant="outlined"
         type="date"
       ></v-text-field>
 
@@ -31,7 +31,7 @@
         v-model="email"
         color="primary"
         label="Email"
-        variant="underlined"
+        variant="outlined"
       ></v-text-field>
 
       <v-text-field
@@ -40,7 +40,7 @@
         label="Mots de passe"
         placeholder="Enter your password"
         type="password"
-        variant="underlined"
+        variant="outlined"
       ></v-text-field>
 
       <v-checkbox
@@ -55,7 +55,12 @@
     <v-card-actions>
       <v-spacer></v-spacer>
 
-      <v-btn color="success">
+      <v-btn color="success"
+        block
+        size="large"
+        variant="tonal"
+      >
+
         S'enregistrer
 
         <v-icon icon="mdi-chevron-right" end></v-icon>
