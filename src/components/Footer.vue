@@ -1,7 +1,7 @@
 <template>
     <v-footer class="d-flex flex-column">
       <div class="bg-teal d-flex w-100 align-center px-4">
-        <strong>Get connected with us on social networks!</strong>
+        <strong>Connectez-vous sur nos réseaux sociaux !!</strong>
   
         <v-spacer></v-spacer>
   

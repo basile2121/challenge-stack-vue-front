@@ -1,15 +1,12 @@
 <template>
   <div>
-
     <v-card
-      class="mx-auto pa-12 pb-8"
+      class="mx-auto pa-12 pb-8 my-8"
       elevation="8"
       max-width="448"
       rounded="lg"
       title="Se connecter"
     >
-
-
       <div class="text-subtitle-1 text-medium-emphasis">Email</div>
 
       <v-text-field
@@ -21,8 +18,6 @@
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
         Mots de passe
-
-       
       </div>
 
       <v-text-field
@@ -50,14 +45,14 @@
           class="text-blue text-decoration-none"
           href="register"
           rel="noopener noreferrer"
-        >
-          S'inscrire   <v-icon icon="mdi-chevron-right"></v-icon>
+        >S'inscrire<v-icon icon="mdi-chevron-right"></v-icon>
         </a>
       </v-card-text>
     </v-card>
   </div>
 </template>
-<script>
+
+<script lang="ts">
   export default {
     data: () => ({
       visible: false,

@@ -1,7 +1,9 @@
 <template>
   <v-card
-    class="mx-auto"
-    max-width="344"
+    class="mx-auto pa-12 pb-8 my-8"
+    elevation="8"
+    max-width="448"
+    rounded="lg"
     title="S'inscrire"
   >
     <v-container>
@@ -68,7 +70,7 @@
     </v-card-actions>
   </v-card>
 </template>
-<script>
+<script lang="ts">
   export default {
     data: () => ({
       first: null,
