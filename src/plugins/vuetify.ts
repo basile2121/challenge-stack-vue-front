@@ -10,6 +10,8 @@ import 'vuetify/styles'
 
 // Composables
 import { createVuetify } from 'vuetify'
+import {aliases} from "vuetify/iconsets/fa";
+import {mdi} from "vuetify/iconsets/mdi";
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -21,6 +23,13 @@ export default createVuetify({
           secondary: '#5CBBF6',
         },
       },
+    },
+  },
+  icons: {
+    defaultSet: "mdi",
+    aliases,
+    sets: {
+      mdi,
     },
   },
 })
