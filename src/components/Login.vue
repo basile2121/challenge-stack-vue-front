@@ -14,6 +14,7 @@
         placeholder="Email address"
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
+        v-model="email"
       ></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -27,6 +28,7 @@
         placeholder="Entrez votre mots de passe"
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
+        v-model="password"
         @click:append-inner="visible = !visible"
       ></v-text-field>
 
@@ -36,6 +38,7 @@
         color="blue"
         size="large"
         variant="tonal"
+        @click="login"
       >
         Se connecter
       </v-btn>
@@ -53,9 +56,36 @@
 </template>
 
 <script lang="ts">
+  import { useUserStore } from '../stores/user';
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   export default {
-    data: () => ({
-      visible: false,
-    }),
+    setup() {
+      const router = useRouter();
+      const userStore = useUserStore();
+      let email = ref(null);
+      let password = ref(null);
+
+
+      const login = () => {
+        console.log(email.value, password.value);
+        userStore.login(email.value, password.value);
+        router.push('/')
+      };
+
+      const logout = () => {
+        userStore.logout();
+      };
+
+      return {
+        user: userStore.user,
+        login,
+        logout,
+        email,
+        password,
+        visible: false
+      };
+  },
+
   }
 </script>
