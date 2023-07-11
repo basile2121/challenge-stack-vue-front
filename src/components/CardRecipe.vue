@@ -1,16 +1,15 @@
 <template>
       <v-card
-    :loading="loading"
     class="mx-auto"
     max-width="674"
   >
     <v-card-item >
-      <v-card-title class="text-center" color="blue">{{this.recipe.name}} </v-card-title> 
+      <v-card-title class="text-center" color="blue">{{recipe.name}} </v-card-title> 
       
     </v-card-item>
     
     <v-divider class="mx-4 mb-1"></v-divider>
-    <v-card-title>Aliments <v-icon size="xsmall" class="pb-2" color="red-accent-2" icon="mdi-food"/> </v-card-title> 
+    <v-card-title>Aliments <v-icon size="xsmall" class="pb-2" color="red-accent-2" icon="mdi-food"/> <v-chip color="orange"> Pour {{recipe.number_of_person}} personnes</v-chip> </v-card-title> 
     <v-card-text>
 <v-table class="aliments">
     <thead>
@@ -93,12 +92,12 @@
       </v-card-actions>
       <v-divider class="mx-4 my-3"></v-divider>
     <v-card-actions>     
-      <DialogIngredient :recipe="recipe.ingredients"/>
+      <DialogIngredient :recipe="recipe"/>
       </v-card-actions>
   </v-card>
 
 </template>
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 import DialogIngredient from "../components/DialogIngredient"
 export default {
@@ -108,6 +107,7 @@ export default {
     },
     props: {
         recipe: Object,
-    }
+    },
+    
 }
 </script>

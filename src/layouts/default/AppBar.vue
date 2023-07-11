@@ -26,7 +26,7 @@ data(){
   return {
     appTitle: 'Accueil',
     menuItems: [
-        { title: 'Recettes', path: '/', icon: 'home' },
+        { title: 'Recettes', path: '/recipes', icon: 'home' },
         { title: 'Inscription', path: '/register', icon: 'face' },
         { title: 'Connexion', path: '/login', icon: 'lock_open' }
    ]

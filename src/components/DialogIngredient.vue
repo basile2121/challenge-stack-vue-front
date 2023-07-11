@@ -2,8 +2,7 @@
 <v-btn 
         color="green"
         class="mx-auto mb-3"
-        variant="outlined-text"
-        @click="dialog = true"
+        @click="openDialog(recipe)"
       >
         Référentiel
          <v-tooltip
@@ -15,12 +14,12 @@
     
     <v-dialog
       v-model="dialog"
-      width="50%"
+      width="40%"
       class="px-10"
     >
 
       <v-card>
-        <v-card-text v-for="ingredient in recipe"
+        <v-card-text v-for="ingredient in recipe.ingredients"
           :key="ingredient.name">
             <FormIngredient :ingredient="ingredient"/>
         </v-card-text>
@@ -31,8 +30,10 @@
     </v-dialog>
   </div>
 </template>
-<script>
+<script lang="ts">
+  import { ref } from 'vue'
   import FormIngredient from "../components/FormIngredient"
+  import { useRecipeStore } from '@/stores/recipe';
   export default {
     name: "DialogIngredient",
     components: {
@@ -41,9 +42,19 @@
     props: {
         recipe:Object,
     },
-    data () {
+    setup () {
+      
+      const store = useRecipeStore();
+      const dialog = ref(false)
+      const openDialog = (recipe: any) => {
+        store.selectedRecipe = {}
+        dialog.value = true;
+        store.selectedRecipe = recipe;
+      }
+      
       return {
-        dialog: false,
+        openDialog,
+        dialog,
       }
     },
   }
