@@ -187,7 +187,6 @@ export default {
       pom.href = url;
       pom.setAttribute('download', 'export.json');
       pom.click();
-
     },
 
     /**
