@@ -122,6 +122,8 @@
 </template>
 
 <script lang="ts">
+import { useRecipeStore } from '@/stores/recipe';
+const store = useRecipeStore();
 export default {
   name: 'CalculatorComponent',
   data: () => ({
@@ -132,6 +134,7 @@ export default {
     textSnackBar: '',
   }),
   methods: {
+    
     /**
      * Lire un fichier JSON pour retourner le JSON
      * @param file
@@ -162,6 +165,7 @@ export default {
             this.displayAnalyseResult = !this.displayAnalyseResult
           } else if (typeAction === 'save') {
             this.handleSnackBar(typeAction)
+            store.createRecipe(this.jsonResult)
           }
         } else {
           this.handleSnackBar('fileExtension')
