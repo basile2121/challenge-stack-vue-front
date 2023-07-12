@@ -1,7 +1,7 @@
 <template>
       <v-card
     class="mx-auto"
-    max-width="674"
+    max-width="600"
   >
     <v-card-item >
       <v-card-title class="text-center" color="blue">{{recipe.name}} </v-card-title> 
@@ -9,7 +9,8 @@
     </v-card-item>
     
     <v-divider class="mx-4 mb-1"></v-divider>
-    <v-card-title>Aliments <v-icon size="xsmall" class="pb-2" color="red-accent-2" icon="mdi-food"/> <v-chip color="orange"> Pour {{recipe.number_of_person}} personnes</v-chip> </v-card-title> 
+    <v-card-title>Aliments <v-icon size="xsmall" class="pb-2" color="red-accent-2" icon="mdi-food"/>  <v-chip color="orange"> Pour {{recipe.number_of_person}} personnes</v-chip> <v-chip class="float-right" color="red" v-if="userStore.user._id == recipe.user._id" @click="deleteRecipe(recipe)"> <v-icon size="large" class="px-2"  icon="mdi-trash-can-outline"/></v-chip> </v-card-title>
+     
     <v-card-text>
 <v-table class="aliments">
     <thead>
@@ -52,14 +53,17 @@
     <v-card-title>Apports nutritionnels <v-icon size="xsmall" color="red-accent-2" class="pb-1" icon="mdi-chart-bar"/></v-card-title>
 
     <div class="px-4">
-      <v-chip-group >
-        <v-chip>Total KCal</v-chip>
+      
+      <v-chip  v-if="!displayAnalyze" color="purple" class="analyze" @click="analyzeRecipe(recipe)">Voir Analyse</v-chip>
+      
+      <v-chip-group v-if="displayAnalyze && analyzeResponse !== null">
+        <v-chip>Total KCal : {{analyzeResponse.totalCalorique}}</v-chip>
 
-        <v-chip>Total proteines</v-chip>
+        <v-chip>Total proteines : {{analyzeResponse.totalProtein}}</v-chip>
 
-        <v-chip>Total glucides</v-chip>
+        <v-chip>Total glucides : {{analyzeResponse.totalGlucide}}</v-chip>
 
-        <v-chip>Total lipides</v-chip>
+        <v-chip>Total lipides : {{analyzeResponse.totalLipide}}</v-chip>
       </v-chip-group>
     </div>
     <v-divider class="mx-4 my-3"></v-divider>
@@ -122,22 +126,56 @@ import { defineComponent } from 'vue'
 import { ref } from 'vue'
 import DialogIngredient from "../components/DialogIngredient"
 import { useUserStore } from '@/stores/user';
+import { useRecipeStore } from '@/stores/recipe';
+
 export default {
     name:"CardRecipe",
     components: {
         DialogIngredient
     },
     props: {
-        recipe: Object,
+      recipe: {
+        type: Object,
+        required: true,
+      }
     },
-
+  
     setup (){
       const userStore = useUserStore();
+      const store = useRecipeStore();
+
       const show = ref(false)
+      const displayAnalyze = ref(false)
+      const analyzeResponse = ref(null)
+     
+      const analyzeRecipe = async (recipe:any) => {
+        displayAnalyze.value = true;
+        analyzeResponse.value = await store.analyzeRecipe(recipe)
+      }
+      
+      const deleteRecipe = (recipe: any) => {
+        const res = store.deleteRecipe(recipe);
+        if(res.status = 200){
+          store.recipes.splice(recipe._id,1)
+        }
+        
+      }
       return {
         show,
+        displayAnalyze,
+        userStore,
+        deleteRecipe,
+        analyzeRecipe,
+        analyzeResponse,
       }
     }
+  
     
 }
 </script>
+
+<style>
+.analyze:hover {
+  cursor:pointer;
+}
+</style>

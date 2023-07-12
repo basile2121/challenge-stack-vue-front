@@ -7,12 +7,12 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-btn flat to="/">Recettes </v-btn>
-      <v-btn  flat to="/profil" >profil</v-btn>
-      <v-btn v-if="userStore.user === undefined" flat to="/login">Connexion</v-btn>
-      <v-btn v-if="!userStore.user" flat to="/register">Inscription</v-btn>
+      <router-link class="v-btn text-white" to="/recipes"><v-btn> Recettes </v-btn> </router-link>
+      <router-link class="v-btn text-white" v-if="userStore.user === undefined" flat to="/login"> <v-btn> Connexion</v-btn></router-link>
+      <router-link class="v-btn text-white" v-if="!userStore.user" flat to="/register"><v-btn>Inscription</v-btn></router-link>
+
       <v-btn v-if="userStore.user" @click="logout" flat >se déconnecter</v-btn>
-      <v-btn v-if="userStore.user" >Bienvenue {{ userStore.user.email }}</v-btn>
+      <v-btn v-if="userStore.user" >Bienvenue {{ userStore.user.firstName }}</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
