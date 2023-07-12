@@ -1,14 +1,14 @@
 // userStore.js
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: null,
+    user: {},
   }),
   actions: {
-    async login(email, password) {
+    async login(email:string, password:string) {
       try {
         // Effectuez votre requête HTTP pour l'authentification
         const response = await axios.post('http://localhost:3003/api/auth/login', { email, password });
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', {
         console.error(error);
       }
     },
-    async register(email, password, firstName,lastName,date ) {
+    async register(email :string, password:string, firstName:string,lastName:string,date:string ) {
       try {
         // Effectuez votre requête HTTP pour l'inscription
         const response = await axios.post('http://localhost:3003/api/auth/register', { email, password, firstName,lastName,date });

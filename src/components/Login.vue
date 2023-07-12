@@ -15,6 +15,7 @@
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
         v-model="email"
+        required
       ></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -30,6 +31,7 @@
         variant="outlined"
         v-model="password"
         @click:append-inner="visible = !visible"
+        required
       ></v-text-field>
 
       <v-btn
@@ -63,24 +65,20 @@
     setup() {
       const router = useRouter();
       const userStore = useUserStore();
-      let email = ref(null);
-      let password = ref(null);
+      let email =ref(null);
+      let password =ref(null);
 
 
       const login = () => {
-        console.log(email.value, password.value);
         userStore.login(email.value, password.value);
         router.push('/')
       };
 
-      const logout = () => {
-        userStore.logout();
-      };
+
 
       return {
         user: userStore.user,
         login,
-        logout,
         email,
         password,
         visible: false
