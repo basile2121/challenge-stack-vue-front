@@ -75,31 +75,53 @@
         
         </v-item>
       </v-item-group>
+      <v-expand-transition>
+      <div v-if="show">
+        
+          <v-item-group multiple selected-class="bg-purple">
+        <v-item
+          v-for="step in this.recipe.steps.slice(2,recipe.steps.length)"
+          :key="step.order"
+        >
+        <div class="text-subtitle-1 text-decoration-underline">Etape {{ step.order }} :</div>
+        <div class="text-body-1 my-2 " color="grey"> {{ step.description }}</div>
+        
+        </v-item>
+      </v-item-group>
+       
+        
+      </div>
+    </v-expand-transition>
     </v-card-text>
-    <v-divider class="mx-4 my-3"></v-divider>
-    <v-card-actions>
+    <v-divider v-if="recipe.steps.length > 2" class="mx-4 my-3"></v-divider>
+    <v-card-actions v-if="recipe.steps.length > 2">
+      
       <v-btn
         color="blue"
         class="mx-auto"
         variant="text"
+        @click="show = !show"
       >
-        VOIR PLUS
+        {{ !show ? 'Voir plus' : 'Voir moins' }}
         <v-tooltip
         activator="parent"
         location="end"
       >Voir le recette</v-tooltip>
       </v-btn>
+      
       </v-card-actions>
       <v-divider class="mx-4 my-3"></v-divider>
-    <v-card-actions>     
-      <DialogIngredient :recipe="recipe"/>
+      <v-card-actions>     
+        <DialogIngredient :recipe="recipe"/>
       </v-card-actions>
   </v-card>
 
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { ref } from 'vue'
 import DialogIngredient from "../components/DialogIngredient"
+import { useUserStore } from '@/stores/user';
 export default {
     name:"CardRecipe",
     components: {
@@ -108,6 +130,14 @@ export default {
     props: {
         recipe: Object,
     },
+
+    setup (){
+      const userStore = useUserStore();
+      const show = ref(false)
+      return {
+        show,
+      }
+    }
     
 }
 </script>

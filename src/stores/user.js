@@ -1,19 +1,26 @@
 // userStore.js
-import { defineStore } from 'pinia';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { defineStore } from "pinia";
+import axios from "axios";
+import { useRouter } from "vue-router";
 
-export const useUserStore = defineStore('user', {
-  state: () => ({
-    user: null,
-  }),
+export const useUserStore = defineStore("user", {
+  state: () => {
+    return {
+      user: undefined,
+    };
+  },
   actions: {
     async login(email, password) {
       try {
         // Effectuez votre requête HTTP pour l'authentification
-        const response = await axios.post('http://localhost:3003/api/auth/login', { email, password });
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/login",
+          { email, password },
+          { withCredentials: true }
+        );
 
         // Stockez les informations utilisateur dans le store
+
         this.user = response.data.user;
       } catch (error) {
         // Gérez les erreurs de connexion ici
@@ -23,21 +30,22 @@ export const useUserStore = defineStore('user', {
     async logout() {
       try {
         // Effectuez votre requête HTTP pour la déconnexion
-        await axios.post('http://localhost:3003/api/auth/logout');
+        await axios.post("http://localhost:3003/api/auth/logout");
 
         // Réinitialisez les informations utilisateur dans le store
         this.user = null;
-
-
       } catch (error) {
         // Gérez les erreurs de déconnexion ici
         console.error(error);
       }
     },
-    async register(email, password, firstName,lastName,date ) {
+    async register(email, password, firstName, lastName, date) {
       try {
         // Effectuez votre requête HTTP pour l'inscription
-        const response = await axios.post('http://localhost:3003/api/auth/register', { email, password, firstName,lastName,date });
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/register",
+          { email, password, firstName, lastName, date }
+        );
 
         // Stockez les informations utilisateur dans le store
         this.user = response.data.user;

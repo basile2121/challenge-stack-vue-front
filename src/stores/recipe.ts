@@ -22,10 +22,12 @@ export const useRecipeStore = defineStore("recipe", {
       try {
         const response = await axios.put(
           `http://localhost:3003/api/recipes/${recipe._id}`,
-          recipe
+          recipe,
+          { withCredentials: true }
         );
       } catch (error) {
         console.error("Erreur lors de la mise à jour de la recette :", error);
+        return error;
       }
     },
   },

@@ -71,7 +71,7 @@
             carbohydrate_per_100,
             lipid_per_100,
             unity,
-            onSubmit(){
+            async onSubmit(){
                 const ingredients = store.selectedRecipe.ingredients
 
                 // console.log(ingredients, 'iii')
@@ -86,7 +86,7 @@
                 }
                 ingredients.splice(updatedIngredient._id, 1, updatedIngredient)
                 // console.log(store.selectedRecipe)
-                store.updateRecipe(store.selectedRecipe)
+                console.log(await store.updateRecipe(store.selectedRecipe))
             }
         }
     },
