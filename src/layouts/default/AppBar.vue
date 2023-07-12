@@ -9,7 +9,7 @@
     <v-toolbar-items>
       <v-btn flat to="/">Recettes </v-btn>
       <v-btn  flat to="/profil" >profil</v-btn>
-      <v-btn v-if="!userStore.user" flat to="/login">Connexion</v-btn>
+      <v-btn v-if="userStore.user === undefined" flat to="/login">Connexion</v-btn>
       <v-btn v-if="!userStore.user" flat to="/register">Inscription</v-btn>
       <v-btn v-if="userStore.user" @click="logout" flat >se déconnecter</v-btn>
       <v-btn v-if="userStore.user" >Bienvenue {{ userStore.user.email }}</v-btn>
