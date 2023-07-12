@@ -12,6 +12,7 @@
         label="Prénom"
         variant="outlined"
         v-model="firstName"
+        required
       ></v-text-field>
 
       <v-text-field
@@ -19,6 +20,7 @@
         color="primary"
         label="Nom"
         variant="outlined"
+        required
       ></v-text-field>
 
       <v-text-field
@@ -27,6 +29,7 @@
         label="Date de naissance"
         variant="outlined"
         type="date"
+        required
       ></v-text-field>
 
       <v-text-field
@@ -34,6 +37,7 @@
         color="primary"
         label="Email"
         variant="outlined"
+        required
       ></v-text-field>
 
       <v-text-field
@@ -43,12 +47,14 @@
         placeholder="Enter your password"
         type="password"
         variant="outlined"
+        required
       ></v-text-field>
 
       <v-checkbox
         v-model="terms"
         color="secondary"
         label="J'accepter les conditions du site"
+        required
       ></v-checkbox>
     </v-container>
 
@@ -86,7 +92,7 @@ export default {
      let terms= ref(false);
 
     const register = () => {
-      console.log(email.value, password.value, firstName.value);
+      console.log(email.value);
       userStore.register(email.value, password.value, firstName.value, lastName.value, date.value);
       router.push('/')
     };

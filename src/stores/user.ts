@@ -1,22 +1,24 @@
 // userStore.js
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: null,
+    user: undefined as any,
   }),
   actions: {
-    async login(email, password) {
+    async login(email:string, password:string) {
       try {
         // Effectuez votre requête HTTP pour l'authentification
-        const response = await axios.post('http://localhost:3003/api/auth/login', { email, password });
+        const response = await axios.post('http://localhost:3003/api/auth/login', { email, password }, { withCredentials: true });
 
         // Stockez les informations utilisateur dans le store
         this.user = response.data.user;
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       } catch (error) {
         // Gérez les erreurs de connexion ici
+        console.log(error)
         console.error(error);
       }
     },
@@ -26,7 +28,8 @@ export const useUserStore = defineStore('user', {
         await axios.post('http://localhost:3003/api/auth/logout');
 
         // Réinitialisez les informations utilisateur dans le store
-        this.user = null;
+        this.user = undefined;
+        localStorage.removeItem('user');
 
 
       } catch (error) {
@@ -34,7 +37,7 @@ export const useUserStore = defineStore('user', {
         console.error(error);
       }
     },
-    async register(email, password, firstName,lastName,date ) {
+    async register(email :string, password:string, firstName:string,lastName:string,date:string ) {
       try {
         // Effectuez votre requête HTTP pour l'inscription
         const response = await axios.post('http://localhost:3003/api/auth/register', { email, password, firstName,lastName,date });
