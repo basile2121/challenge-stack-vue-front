@@ -1,87 +1,102 @@
-# Documentation technique projet calculateur de calorie
+# Documentation côté Back end
 
-## 1. Description du projet 
+## 1. Technologies
 
-Le projet a été réalisé dans le cadre du challenge stack de notre 1ère année de Master. 
+- Framework : [Node JS](https://nodejs.org/en) v18.16
+- Langage : [Typescript](https://www.typescriptlang.org/docs/home) V5.1
+- Dépendances importantes :
+  - faker : [v8.0.2](https://www.npmjs.com/package/@faker-js/faker)
+    - Permet de générer des fausses données pour générer notre recette aléatoire
+  - bcrypt: [v5.0](https://www.npmjs.com/package/bcrypt) 
+    - Permet de hacher les mot de passe de l'utilisateur
+  - express : [v4.17](https://www.npmjs.com/package/express) 
+    - Nous donne une architecture, ce qui permet de mieux maintenir le code dans le futur et d'avoir une logique cohérente pour notre API
+  - dotenv: [v16.3](https://www.npmjs.com/package/dotenv) 
+    - Nous permet d'avoir des variables d'environnement dans notre projet
+  - mongoose : [v7.3](https://www.npmjs.com/package/mongoose) 
+    - ODM qui permet le raccordement avec MongoDB
+- GitHub : https://github.com/Yaamto/challenge-stack-node-back
 
-Le projet permet d'analyser l'apport calorique et les macros nutriments d'une recette. Chaque recette analysée est stockée dans la liste des recettes de l'application. 
+#### Base de données : 
 
-Les utilisateurs peuvent modifier et supprimer les recettes qu'ils ont eux même sauvegardées. Une authentification est requise pour accéder à la liste des recettes, ainsi qu'à l'enregistrement d'une recette.
+URL MongoDB : mongodb+srv://[username]:[password]@cluster0.ivelk.mongodb.net/[db_name]
 
-Les appels à l’API se font en HTTP sur un serveur Node.js (Express).
+*Utiliser MongoDB Compass pour y accéder*
 
-Le Frontend est fait en VueJS
+**Modèle de données : **
 
-## 2. Documentations des projets
+![img](https://cdn.discordapp.com/attachments/938010834607669288/1127890835653001326/Capture_decran_2023-07-10_100632.png)
 
-Front : 
+###  Installation locale du projet 
 
-Back : 
+Cloner le projet github :
 
-## 3. Architecture technique du projet 
-
-![Vue.js + Node.js + Express + MongoDB example: MEVN stack ...](https://bezkoder.com/wp-content/uploads/2020/02/vue-node-express-mongodb-crud-mean-stack-architecture.png)
-
-## 4. Fonctionnalités implémentées 
-
-##### API : 
-
-- Sécurisation de l'API
-- Swagger pour la documentation de l'API
-
-**Authentification :**
-
-- Inscription : Permet à l'utilisateur de s'enregistrer sur le site via un formulaire. Son mot de passe est crypté dans l'API.
-- Login : L'utilisateur peut se connecter grâce à son email et son mot de passe via un formulaire.
-- Logout : Permet à l'utilisateur de se déconnecter
-- Whoami : Endpoint API pour vérifier si le token de l'utilisateur est valide
-
-**Calculator :** 
-
-- Importer un fichier JSON d'une recette
-- Lancer l'analyse du fichier JSON importé
-- Affichage de l'analyse avec le total calorique de la recette, le nombre de protéines, glucides et lipides de la recette.
-- Enregistrer la recette importée en BDD
-- Exporter dans un fichier JSON la recette importée  
-- Exporter dans un fichier CSV la recette importée
-
-**Recettes :** 
-
-- Liste des recettes disponibles dans la BDD
-- Affichage des informations de la recette dans une carte : 
-  - Liste des ingrédients de la recette avec le détail de chaque macro-nutriment.
-  - Résumé de l'analyse de la recette (totaux calorique, glucides, lipides, protéines) et possibilité de lancer une nouvelle analyse
-  - Listes des étapes de la recette, avec un "voir plus" s'il y a plus de 2 étapes.
-  - Pour l'utilisateur qui a créé la recette : 
-    - Possibilité d'accéder au référentiel de la recette et de modifier les ingrédients
-    - Supprimer sa recette
-  - Informations sur le propriétaire de la recette
-
-**Autres :** 
-
-- Générer une recette aléatoire
-- Téléchargement de la recette dans un fichier JSON
-- Responsivité
-
-## 5. Déploiement de l'application
-
-### 5.1 Front
-
-Lancer le build dans le projet VueJS : 
-
-```
-npm run build
+```shell
+git clone https://github.com/Yaamto/challenge-stack-node-back
 ```
 
-Cette commande générera un dossier dist qu'il faudra déplacer dans le dossier public du projet NodeJs.
+Installer les dépendances :
 
-### 5.2 API
+```nginx
+npm install
+```
 
-Pour l'API il faut héberger le code sur un serveur. Puis via GIT mettre en place une CI/CD qui mettra le code en production automatiquement sur le serveur.
+Créer le .env suivant : 
 
-## 6. Mise en place de Google Analytics
+```shell
+PORT=3003
+DB_USERNAME=
+DB_PASSWORD=
+DB_NAME=
+TOKEN_SECRET=
+```
 
-Le but de Google Analytics va être de pouvoir faire des statistiques d'utilisation de notre projet et analyser le trafic du site. Il permettra de savoir quelle proportion d'utilisateurs enregistrent leurs recettes sur le site suite à leurs résultats.
+Lancer le projet :
 
-Pour ça il suffit de suivre le tutoriel d'implémentation dans un projet nodeJS : https://cloud.google.com/appengine/docs/flexible/nodejs/integrating-with-analytics?hl=fr
+```nginx
+npm run dev
+```
+
+L’API démarre par défaut sur http://localhost:3003 par défaut. **Attention l'API n'accepte que le port 3000**
+
+### 1.4 Fonctionnement technique
+
+#### 1.4.1 EndPoint API 
+
+```
+Authentification : 
+POST /register - S'enregistrer
+POST /login - Se connecter 
+POST /logout - Se déconnecter
+GET /whoami - Vérifier le token
+
+Recettes : 
+GET / - Récupérer l'ensemble des recettes
+POST / - Créer une recette
+DELETE /{id} - Supprimer une recette
+PUT /{id} - Modifier une recette
+GET /analyse/{id} - Analyser l'apport calorique d'une recette
+GET /random/create - Génére une recette aléatoire
+```
+
+### 1.5 Architecture des projets
+
+```
+|_challenge-stack-node-back
+	|_ dist/
+	|_ node_modules/       -->(template)
+	|_ .env				-->(template)
+	|-- src/
+		|_ /config
+		|_ /controller
+		|_ /middleware
+		|_ /model
+		|_ /route
+		|_ /service
+		|-- index.php 
+```
+
+### 1.6 Postman
+
+Collection Postman pour tester l'API : [Collection](https://github.com/Yaamto/challenge-stack-node-back/blob/documentation/Documentation/ChallengeStack.postman_collection.json)
 
