@@ -1,102 +1,91 @@
-# Documentation côté Back end
+# Documentation technique projet calculateur de calorie
 
-## 1. Technologies
+## 1. Description du projet 
 
-- Framework : [Node JS](https://nodejs.org/en) v18.16
-- Langage : [Typescript](https://www.typescriptlang.org/docs/home) V5.1
-- Dépendances importantes :
-  - faker : [v8.0.2](https://www.npmjs.com/package/@faker-js/faker)
-    - Permet de générer des fausses données pour générer notre recette aléatoire
-  - bcrypt: [v5.0](https://www.npmjs.com/package/bcrypt) 
-    - Permet de hacher les mot de passe de l'utilisateur
-  - express : [v4.17](https://www.npmjs.com/package/express) 
-    - Nous donne une architecture, ce qui permet de mieux maintenir le code dans le futur et d'avoir une logique cohérente pour notre API
-  - dotenv: [v16.3](https://www.npmjs.com/package/dotenv) 
-    - Nous permet d'avoir des variables d'environnement dans notre projet
-  - mongoose : [v7.3](https://www.npmjs.com/package/mongoose) 
-    - ODM qui permet le raccordement avec MongoDB
-- GitHub : https://github.com/Yaamto/challenge-stack-node-back
+Le projet a été réalisé dans le cadre du challenge stack de notre 1ère année de Master. 
 
-#### Base de données : 
+Le projet permet d'analyser l'apport calorique et les macros nutriments d'une recette. Chaque recette analysée est stockée dans la liste des recettes de l'application. 
 
-URL MongoDB : mongodb+srv://[username]:[password]@cluster0.ivelk.mongodb.net/[db_name]
+Les utilisateurs peuvent modifier et supprimer les recettes qu'ils ont eux même sauvegardées. Une authentification est requise pour accéder à la liste des recettes, ainsi qu'à l'enregistrement d'une recette.
 
-*Utiliser MongoDB Compass pour y accéder*
+Les appels à l’API se font en HTTP sur un serveur Node.js (Express).
 
-**Modèle de données : **
+Le Frontend est fait en VueJS
 
-![img](https://cdn.discordapp.com/attachments/938010834607669288/1127890835653001326/Capture_decran_2023-07-10_100632.png)
+## 2. Documentations des projets
 
-###  Installation locale du projet 
+Front : [Documentation Front VUE](https://github.com/basile2121/challenge-stack-vue-front/blob/documentation/Documentation/README.md)
 
-Cloner le projet github :
+[GitHub](https://github.com/basile2121/challenge-stack-vue-front)
 
-```shell
-git clone https://github.com/Yaamto/challenge-stack-node-back
-```
+Back : [Documentation Back API](https://github.com/Yaamto/challenge-stack-node-back/blob/documentation/Documentation/README.md)
 
-Installer les dépendances :
+[GitHub](https://github.com/Yaamto/challenge-stack-node-back)
 
-```nginx
-npm install
-```
+## 3. Architecture technique du projet 
 
-Créer le .env suivant : 
+![Vue.js + Node.js + Express + MongoDB example: MEVN stack ...](https://bezkoder.com/wp-content/uploads/2020/02/vue-node-express-mongodb-crud-mean-stack-architecture.png)
 
-```shell
-PORT=3003
-DB_USERNAME=
-DB_PASSWORD=
-DB_NAME=
-TOKEN_SECRET=
-```
+## 4. Fonctionnalités implémentées 
 
-Lancer le projet :
+##### API : 
 
-```nginx
-npm run dev
-```
+- Sécurisation de l'API
+- Swagger pour la documentation de l'API
 
-L’API démarre par défaut sur http://localhost:3003 par défaut. **Attention l'API n'accepte que le port 3000**
+**Authentification :**
 
-### 1.4 Fonctionnement technique
+- Inscription : Permet à l'utilisateur de s'enregistrer sur le site via un formulaire. Son mot de passe est crypté dans l'API.
+- Login : L'utilisateur peut se connecter grâce à son email et son mot de passe via un formulaire.
+- Logout : Permet à l'utilisateur de se déconnecter
+- Whoami : Endpoint API pour vérifier si le token de l'utilisateur est valide
 
-#### 1.4.1 EndPoint API 
+**Calculator :** 
 
-```
-Authentification : 
-POST /register - S'enregistrer
-POST /login - Se connecter 
-POST /logout - Se déconnecter
-GET /whoami - Vérifier le token
+- Importer un fichier JSON d'une recette
+- Lancer l'analyse du fichier JSON importé
+- Affichage de l'analyse avec le total calorique de la recette, le nombre de protéines, glucides et lipides de la recette.
+- Enregistrer la recette importée en BDD
+- Exporter dans un fichier JSON la recette importée  
+- Exporter dans un fichier CSV la recette importée
 
-Recettes : 
-GET / - Récupérer l'ensemble des recettes
-POST / - Créer une recette
-DELETE /{id} - Supprimer une recette
-PUT /{id} - Modifier une recette
-GET /analyse/{id} - Analyser l'apport calorique d'une recette
-GET /random/create - Génére une recette aléatoire
-```
+**Recettes :** 
 
-### 1.5 Architecture des projets
+- Liste des recettes disponibles dans la BDD
+- Affichage des informations de la recette dans une carte : 
+  - Liste des ingrédients de la recette avec le détail de chaque macro-nutriment.
+  - Résumé de l'analyse de la recette (totaux calorique, glucides, lipides, protéines) et possibilité de lancer une nouvelle analyse
+  - Listes des étapes de la recette, avec un "voir plus" s'il y a plus de 2 étapes.
+  - Pour l'utilisateur qui a créé la recette : 
+    - Possibilité d'accéder au référentiel de la recette et de modifier les ingrédients
+    - Supprimer sa recette
+  - Informations sur le propriétaire de la recette
+
+**Autres :** 
+
+- Générer une recette aléatoire
+- Téléchargement de la recette dans un fichier JSON
+- Responsivité
+
+## 5. Déploiement de l'application
+
+### 5.1 Front
+
+Lancer le build dans le projet VueJS : 
 
 ```
-|_challenge-stack-node-back
-	|_ dist/
-	|_ node_modules/       -->(template)
-	|_ .env				-->(template)
-	|-- src/
-		|_ /config
-		|_ /controller
-		|_ /middleware
-		|_ /model
-		|_ /route
-		|_ /service
-		|-- index.php 
+npm run build
 ```
 
-### 1.6 Postman
+Cette commande générera un dossier dist qu'il faudra déplacer dans le dossier public du projet NodeJs.
 
-Collection Postman pour tester l'API : [Collection](https://github.com/Yaamto/challenge-stack-node-back/blob/documentation/Documentation/ChallengeStack.postman_collection.json)
+### 5.2 API
+
+Pour l'API il faut héberger le code sur un serveur. Puis via GIT mettre en place une CI/CD qui mettra le code en production automatiquement sur le serveur.
+
+## 6. Mise en place de Google Analytics
+
+Le but de Google Analytics va être de pouvoir faire des statistiques d'utilisation de notre projet et analyser le trafic du site. Il permettra de savoir quelle proportion d'utilisateurs enregistrent leurs recettes sur le site suite à leurs résultats.
+
+Pour ça il suffit de suivre le tutoriel d'implémentation dans un projet nodeJS : https://cloud.google.com/appengine/docs/flexible/nodejs/integrating-with-analytics?hl=fr
 
