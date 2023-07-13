@@ -11,7 +11,7 @@
         location="end"
       >Exporter le référentiel</v-tooltip>
       </v-btn>
-      <div v-else class="text-subtitle-1 font-weight-light font-italic mx-auto">Recette postée par {{userStore.user.firstName}}</div>
+      <div v-else class="text-subtitle-1 font-weight-light font-italic mx-auto">Recette postée par {{recipe.user.firstName}}</div>
     
     <div class="text-center">
     

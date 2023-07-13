@@ -68,6 +68,33 @@ export const useRecipeStore = defineStore("recipe", {
         return error;
       }
     },
+    async analyzeRecipeObject(recipe: any) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3003/api/recipes/single/analyze/",
+          recipe,
+          { withCredentials: true }
+        );
+        console.log(response);
+        return response.data.data;
+      } catch (error) {
+        console.error("Erreur lors de l'analyse de la recette :", error);
+        return error;
+      }
+    },
+    async createRandomRecipe() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3003/api/recipes/random/create/",
+          { withCredentials: true }
+        );
+
+        return response.data.data;
+      } catch (error) {
+        console.error("Erreur lors de l'analyse de la recette :", error);
+        return error;
+      }
+    },
   },
 });
 
