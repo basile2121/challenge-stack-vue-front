@@ -9,20 +9,14 @@ const routes = [
       {
         path: "",
         name: "Home",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
+          import("@/views/Home.vue"),
       },
       {
         path: "recipes",
         name: "Recipes",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/Recipes.vue"),
+          import("@/views/Recipes.vue"),
       },
       {
         path: "login",
@@ -34,7 +28,9 @@ const routes = [
       },
     ],
   },
+
   {
+    // On redirige toutes les routes non définis sur cette page
     path: "/:catchAll(.*)*",
     component: () => import("@/views/ErrorNotFound.vue"),
   },

@@ -5,7 +5,7 @@
     <v-container>
       <v-row>
         <v-col
-          v-for="recipe in store.recipes"
+          v-for="recipe in recipeStore.recipes"
           :key="recipe.name"
           cols="12"
         >
@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-  
+
   import CardRecipe from "../components/CardRecipe";
   import { useRecipeStore } from '@/stores/recipe';
   export default {
@@ -29,10 +29,10 @@
     },
 
     setup(){
-      const store = useRecipeStore();
-      store.getAllRecipes();
+      const recipeStore = useRecipeStore();
+      recipeStore.getAllRecipes();
       return {
-        store,
+        recipeStore,
       }
     },
 

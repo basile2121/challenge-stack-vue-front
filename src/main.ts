@@ -11,7 +11,6 @@ import { createPinia } from "pinia";
 
 // Composables
 import { createApp, watch } from "vue";
-const pinia = createPinia();
 
 // Plugins
 import { registerPlugins } from "@/plugins";

@@ -1,6 +1,6 @@
-import { Console } from "console";
-import { defineStore } from "pinia";
+import {defineStore} from "pinia";
 import axios from "axios";
+const API_URL = 'http://localhost:3003'
 
 export const useRecipeStore = defineStore("recipe", {
   state: () => ({
@@ -12,220 +12,89 @@ export const useRecipeStore = defineStore("recipe", {
   actions: {
     async getAllRecipes() {
       try {
-        const response = await axios.get("http://localhost:3003/api/recipes");
+        const response = await axios.get(API_URL + "/api/recipes");
         this.recipes = response.data.data;
       } catch (error) {
-        console.error("Erreur lors de la récupération des recettes :", error);
+        //TODO Gérez les erreurs ici
+        console.error("Erreur lors de la récupération des recettes : ", error);
       }
     },
     async updateRecipe(recipe: any) {
       try {
         const response = await axios.put(
-          `http://localhost:3003/api/recipes/${recipe._id}`,
+          API_URL + `/api/recipes/${recipe._id}`,
           recipe,
           { withCredentials: true }
         );
       } catch (error) {
-        console.error("Erreur lors de la mise à jour de la recette :", error);
+        console.error("Erreur lors de la mise à jour de la recette : ", error);
         return error;
       }
     },
 
     async deleteRecipe(recipe: any) {
       try {
-        const response = await axios.delete(
-          `http://localhost:3003/api/recipes/${recipe._id}`,
-          { withCredentials: true }
+        return await axios.delete(
+          API_URL + `/api/recipes/${recipe._id}`,
+          {withCredentials: true}
         );
-        return response;
       } catch (error) {
-        console.error("Erreur lors de la mise à jour de la recette :", error);
-        return error;
-      }
-    },
-    async analyzeRecipe(recipe: any) {
-      try {
-        const response = await axios.get(
-          `http://localhost:3003/api/recipes/analyze/${recipe._id}`,
-          { withCredentials: true }
-        );
-
-        return response.data.data;
-      } catch (error) {
-        console.error("Erreur lors de l'analyse de la recette :", error);
+        console.error("Erreur lors de la mise à jour de la recette : ", error);
         return error;
       }
     },
     async createRecipe(recipe: any) {
       try {
         const response = await axios.post(
-          `http://localhost:3003/api/recipes/`,
+          API_URL + `/api/recipes/`,
           recipe,
           { withCredentials: true }
         );
       } catch (error) {
-        console.error("Erreur lors de l'analyse de la recette :", error);
-        return error;
-      }
-    },
-    async analyzeRecipeObject(recipe: any) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3003/api/recipes/single/analyze/",
-          recipe,
-          { withCredentials: true }
-        );
-        console.log(response);
-        return response.data.data;
-      } catch (error) {
-        console.error("Erreur lors de l'analyse de la recette :", error);
+        console.error("Erreur lors de l'analyse de la recette : ", error);
         return error;
       }
     },
     async createRandomRecipe() {
       try {
         const response = await axios.get(
-          "http://localhost:3003/api/recipes/random/create/",
+          "API_URL + /api/recipes/random/create/",
           { withCredentials: true }
         );
 
         return response.data.data;
       } catch (error) {
-        console.error("Erreur lors de l'analyse de la recette :", error);
+        console.error("Erreur lors de l'analyse de la recette : ", error);
+        return error;
+      }
+    },
+    // Analyse une recette avec l'id d'une recette, il faut qu'elle soit enregistré en BDD
+    async analyzeRecipe(recipe: any) {
+      try {
+        const response = await axios.get(
+          API_URL + `/api/recipes/analyze/${recipe._id}`,
+          { withCredentials: true }
+        );
+
+        return response.data.data;
+      } catch (error) {
+        console.error("Erreur lors de l'analyse de la recette : ", error);
+        return error;
+      }
+    },
+    // Analyse une recette pas encore enregistrée en BDD. On passe donc l'objet de la recette directement à l'API
+    async analyzeRecipeObject(recipeObject: any) {
+      try {
+        const response = await axios.post(
+          API_URL + "/api/recipes/single/analyze/",
+          recipeObject,
+          { withCredentials: true }
+        );
+        return response.data.data;
+      } catch (error) {
+        console.error("Erreur lors de l'analyse de la recette : ", error);
         return error;
       }
     },
   },
 });
-
-const allRecipes = [
-  {
-    id: 1,
-    name: "Recette 1",
-    number_of_person: 4,
-    user_id: 2,
-    ingredients: [
-      {
-        id: 1,
-        name: "aliment 1",
-        quantity: 2,
-        protein_per_100: 10,
-        carbohydrate_per_100: 8,
-        lipid_per_100: 15,
-        unity: "g",
-      },
-      {
-        id: 2,
-        name: "aliment 2",
-        quantity: 2,
-        protein_per_100: 5,
-        carbohydrate_per_100: 12,
-        lipid_per_100: 17,
-        unity: "cl",
-      },
-    ],
-    steps: [
-      {
-        id: 1,
-        order: 1,
-        description: "Cassez les oeufs.",
-      },
-      {
-        id: 2,
-        order: 2,
-        description: "Ajoutez la crème, le sel et le poivre.",
-      },
-      {
-        id: 3,
-        order: 3,
-        description: "Enfournerà 180° pendant 20minutes.",
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Recette 2",
-    number_of_person: 3,
-    user_id: 1,
-    ingredients: [
-      {
-        id: 1,
-        name: "aliment 1",
-        quantity: 2,
-        protein_per_100: 10,
-        carbohydrate_per_100: 8,
-        lipid_per_100: 15,
-        unity: "g",
-      },
-      {
-        id: 2,
-        name: "aliment 2",
-        quantity: 2,
-        protein_per_100: 5,
-        carbohydrate_per_100: 12,
-        lipid_per_100: 17,
-        unity: "cl",
-      },
-    ],
-    steps: [
-      {
-        id: 1,
-        order: 1,
-        description: "Cassez les oeufs.",
-      },
-      {
-        id: 2,
-        order: 2,
-        description: "Ajoutez la crème, le sel et le poivre.",
-      },
-      {
-        id: 3,
-        order: 3,
-        description: "Enfournerà 180° pendant 20minutes.",
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Recette 3",
-    number_of_person: 2,
-    user_id: 2,
-    ingredients: [
-      {
-        id: 1,
-        name: "aliment 1",
-        quantity: 2,
-        protein_per_100: 10,
-        carbohydrate_per_100: 8,
-        lipid_per_100: 15,
-        unity: "g",
-      },
-      {
-        id: 2,
-        name: "aliment 2",
-        quantity: 2,
-        protein_per_100: 5,
-        carbohydrate_per_100: 12,
-        lipid_per_100: 17,
-        unity: "cl",
-      },
-    ],
-    steps: [
-      {
-        id: 1,
-        order: 1,
-        description: "Cassez les oeufs.",
-      },
-      {
-        id: 2,
-        order: 2,
-        description: "Ajoutez la crème, le sel et le poivre.",
-      },
-      {
-        id: 3,
-        order: 3,
-        description: "Enfournerà 180° pendant 20minutes.",
-      },
-    ],
-  },
-];

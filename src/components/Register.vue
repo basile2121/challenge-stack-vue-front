@@ -16,17 +16,17 @@
       ></v-text-field>
 
       <v-text-field
-        v-model="lastName"
         color="primary"
         label="Nom"
         variant="outlined"
+        v-model="lastName"
         required
       ></v-text-field>
 
       <v-text-field
-        v-model="date"
         color="primary"
         label="Date de naissance"
+        v-model="date"
         variant="outlined"
         type="date"
         required
@@ -44,18 +44,11 @@
         v-model="password"
         color="primary"
         label="Mots de passe"
-        placeholder="Enter your password"
+        placeholder="Entrez votre mots de passe"
         type="password"
         variant="outlined"
         required
       ></v-text-field>
-
-      <v-checkbox
-        v-model="terms"
-        color="secondary"
-        label="J'accepter les conditions du site"
-        required
-      ></v-checkbox>
     </v-container>
 
     <v-divider></v-divider>
@@ -77,22 +70,20 @@
   </v-card>
 </template>
 <script lang="ts">
-import { useUserStore } from '../stores/user';
+import { useUserStore } from '@/stores/user';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 export default {
   setup() {
     const userStore = useUserStore();
     const router = useRouter();
-     let firstName = ref(null);
-     let lastName= ref(null);
-     let email= ref(null);
-     let password= ref(null);
-     let date = ref(null);
-     let terms= ref(false);
+     let firstName = ref('');
+     let lastName= ref('');
+     let email= ref('');
+     let password= ref('');
+     let date = ref('');
 
     const register = () => {
-      console.log(email.value);
       userStore.register(email.value, password.value, firstName.value, lastName.value, date.value);
       router.push('/')
     };
@@ -105,7 +96,6 @@ export default {
       email,
       password,
       date,
-      terms,
     };
   },
   }

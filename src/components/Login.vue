@@ -8,30 +8,28 @@
       title="Se connecter"
     >
       <div class="text-subtitle-1 text-medium-emphasis">Email</div>
-
       <v-text-field
+        v-model="email"
         density="compact"
         placeholder="Email address"
         prepend-inner-icon="mdi-email-outline"
-        variant="outlined"
-        v-model="email"
         required
+        variant="outlined"
       ></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
         Mots de passe
       </div>
-
       <v-text-field
+        v-model="password"
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'"
         density="compact"
         placeholder="Entrez votre mots de passe"
         prepend-inner-icon="mdi-lock-outline"
-        variant="outlined"
-        v-model="password"
-        @click:append-inner="visible = !visible"
         required
+        variant="outlined"
+        @click:append-inner="visible = !visible"
       ></v-text-field>
 
       <v-btn
@@ -46,44 +44,38 @@
       </v-btn>
 
       <v-card-text class="text-center">
-        <a
-          class="text-blue text-decoration-none"
-          href="register"
-          rel="noopener noreferrer"
-        >S'inscrire<v-icon icon="mdi-chevron-right"></v-icon>
-        </a>
+        <router-link class="text-blue text-decoration-none" flat to="/register">S'inscrire
+          <v-icon icon="mdi-chevron-right"></v-icon>
+        </router-link>
       </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script lang="ts">
-  import { useUserStore } from '../stores/user';
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  export default {
-    setup() {
-      const router = useRouter();
-      const userStore = useUserStore();
-      let email =ref(null);
-      let password =ref(null);
+import {useUserStore} from '@/stores/user';
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
 
+export default {
+  setup() {
+    const router = useRouter();
+    const userStore = useUserStore();
+    let email = ref('');
+    let password = ref('');
 
-      const login = () => {
-        userStore.login(email.value, password.value);
-        router.push('/')
-      };
+    const login = () => {
+      userStore.login(email.value, password.value);
+      router.push('/')
+    };
 
-
-
-      return {
-        user: userStore.user,
-        login,
-        email,
-        password,
-        visible: false
-      };
+    return {
+      user: userStore.user,
+      login,
+      email,
+      password,
+      visible: false
+    };
   },
-
-  }
+}
 </script>

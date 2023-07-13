@@ -6,17 +6,16 @@
         <v-responsive class="align-center text-center fill-height calculator-input-file-v-responsive">
           <v-file-input
             v-model="files"
-            placeholder="Upload your documents"
             label="Déposez votre recette ici..."
+            placeholder="Upload your documents"
             variant="solo-filled"
           >
             <template v-slot:selection="{ fileNames }">
               <template v-for="fileName in fileNames" :key="fileName">
                 <v-chip
-                  size="small"
-                  label
-                  color="primary"
                   class="me-2"
+                  color="primary"
+                  size="small"
                 >
                   {{ fileName }}
                 </v-chip>
@@ -25,25 +24,27 @@
           </v-file-input>
         </v-responsive>
 
-        <v-row class="calculator-bouttons" align="center" justify="center">
+        <v-row align="center" class="calculator-bouttons" justify="center">
           <v-col cols="auto">
-            <v-btn @click="handleImportRecipe('save')" color="success" elevation="4" rounded="sm" size="large">
+            <v-btn color="success" elevation="4" rounded="sm" size="large" @click="handleImportRecipe('save')">
               Enregistrer
               <v-tooltip
                 activator="parent"
                 location="top"
-              >Enregistrer le recette importée</v-tooltip>
+              >Enregistrer le recette importée
+              </v-tooltip>
             </v-btn>
           </v-col>
 
           <v-col cols="auto">
-            <v-btn @click="handleImportRecipe('analyse')" color="primary" elevation="4" rounded="sm" size="large">
+            <v-btn color="primary" elevation="4" rounded="sm" size="large" @click="handleImportRecipe('analyse')">
               Analyser
               <v-tooltip
                 activator="parent"
                 location="top"
-              >Lancer l'analyse de la recette importée</v-tooltip>
-              </v-btn>
+              >Lancer l'analyse de la recette importée
+              </v-tooltip>
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -56,7 +57,7 @@
           </template>
 
           <div class="d-flex justify-center">
-            <h4>Calories <span style="color: red;">{{analyzeRecipe.totalCalorique}}</span></h4>
+            <h4>Calories <span style="color: red;">{{ analyzeRecipe.totalCalorique }} kcal</span></h4>
             <v-icon color="red" icon="mdi-fire"/>
           </div>
 
@@ -65,46 +66,49 @@
           <h4>Macro nutriments</h4>
 
           <div class="my-3 d-flex justify-center">
-            <div>Proteins - <span style="color: brown;">{{analyzeRecipe.totalProtein}} g</span></div>
+            <div>Proteins - <span style="color: brown;">{{ analyzeRecipe.totalProtein }} g</span></div>
             <v-icon color="brown" icon="mdi-food-drumstick"/>
           </div>
 
           <div class="my-3 d-flex justify-center">
-            <div>Glucide - <span style="color: blue;">{{analyzeRecipe.totalGlucide}} g</span></div>
+            <div>Glucide - <span style="color: blue;">{{ analyzeRecipe.totalGlucide }} g</span></div>
             <v-icon color="blue" icon="mdi-spoon-sugar"/>
           </div>
 
           <div class="my-3 d-flex justify-center">
-            <div>Lipide - <span style="color: yellowgreen;">{{analyzeRecipe.totalLipide}} g</span></div>
+            <div>Lipide - <span style="color: yellowgreen;">{{ analyzeRecipe.totalLipide }} g</span></div>
             <v-icon color="yellow" icon="mdi-water"/>
           </div>
 
         </v-card>
 
         <div class="calculator-rapport-export-buttons my-3">
-          <v-btn @click="exportFile('application/json','export.json')" color="blue">
-            <v-icon size="x-large" icon="mdi-code-json"/>
+          <v-btn color="blue" @click="exportFile('application/json','export.json')">
+            <v-icon icon="mdi-code-json" size="x-large"/>
             <v-tooltip
               activator="parent"
               location="top"
-            >Exporter le rapport d'analyse au format JSON</v-tooltip>
+            >Exporter le rapport d'analyse au format JSON
+            </v-tooltip>
           </v-btn>
-          <v-btn @click="exportFile('data:text/csv;charset=utf-8,', 'export.json')" color="green">
-            <v-icon size="x-large" icon="mdi-file-excel"/>
+          <v-btn color="green" @click="exportFile('data:text/csv;charset=utf-8,', 'export.json')">
+            <v-icon icon="mdi-file-excel" size="x-large"/>
             <v-tooltip
               activator="parent"
               location="top"
-            >Exporter le rapport d'analyse au format CSV</v-tooltip>
+            >Exporter le rapport d'analyse au format CSV
+            </v-tooltip>
           </v-btn>
         </div>
 
       </v-responsive>
-      <v-btn @click="generateRandomRecipe()" color="primary" elevation="4" rounded="sm" class="mt-2" size="large">
+      <v-btn class="mt-2" color="primary" elevation="4" rounded="sm" size="large" @click="generateRandomRecipe()">
         Recette aléatoire
         <v-tooltip
           activator="parent"
           location="top"
-        >Générer une recette aléatoire</v-tooltip>
+        >Générer une recette aléatoire
+        </v-tooltip>
       </v-btn>
       <div class="text-center ma-2">
         <v-snackbar
@@ -128,26 +132,34 @@
 </template>
 
 <script lang="ts">
-import { useRecipeStore } from '@/stores/recipe';
-const store = useRecipeStore();
+import {useRecipeStore} from '@/stores/recipe';
+
+const recipeStore = useRecipeStore();
+interface AnalyseRecipeResponse {
+  totalCalorique: string
+  totalProtein: string
+  totalGlucide: string
+  totalLipide: string
+}
+
 export default {
   name: 'CalculatorComponent',
   data: () => ({
     files: [],
     displayAnalyseResult: false,
-    jsonResult: {},
+    jsonResultFileImport: {},
     displaySnackBar: false,
     textSnackBar: '',
-    analyzeRecipe: {},
+    analyzeRecipe: Object as AnalyseRecipeResponse,
   }),
   methods: {
-    
+
     /**
      * Lire un fichier JSON pour retourner le JSON
      * @param file
      */
     async readFileJson(file): Promise<Object> {
-      return new Promise((res,rej)=>{
+      return new Promise((res, rej) => {
         let reader = new FileReader();
         reader.onload = e => {
           if (typeof e.target.result === "string") {
@@ -163,18 +175,18 @@ export default {
      *
      * @param typeAction
      */
-    async handleImportRecipe (typeAction: string) {
+    async handleImportRecipe(typeAction: string) {
       if (this.files.length === 1) {
         if (this.files[0].type === 'application/json') {
-          this.jsonResult = await this.readFileJson(this.files[0])
+          this.jsonResultFileImport = await this.readFileJson(this.files[0])
           if (typeAction === 'analyse') {
-            this.analyzeRecipe = await store.analyzeRecipeObject(this.jsonResult)
+            this.analyzeRecipe = await recipeStore.analyzeRecipeObject(this.jsonResultFileImport)
             console.log(this.analyzeRecipe)
             this.handleSnackBar(typeAction)
             this.displayAnalyseResult = !this.displayAnalyseResult
           } else if (typeAction === 'save') {
             this.handleSnackBar(typeAction)
-            store.createRecipe(this.jsonResult)
+            await recipeStore.createRecipe(this.jsonResultFileImport)
           }
         } else {
           this.handleSnackBar('fileExtension')
@@ -189,24 +201,18 @@ export default {
      * Le type passé en parametre correspond aux type de fichier généré
      * @param type
      * @param filename
+     * @param data
      */
     exportFile(type: string, filename: string, data?: Object) {
-      // Create a BLOB
-      console.log(data)
       let url = '';
       if (data != null) {
-        let blob = new Blob([JSON.stringify(data)], { type: type });
+        // Create a BLOB
+        let blob = new Blob([JSON.stringify(data)], {type: type});
         url = URL.createObjectURL(blob);
       } else {
-        let blob = new Blob([JSON.stringify(this.jsonResult)], { type: type });
+        let blob = new Blob([JSON.stringify(this.jsonResultFileImport)], {type: type});
         url = URL.createObjectURL(blob);
       }
-
-      // Create a link to download it
-      let pom = document.createElement('a');
-      pom.href = url;
-      pom.setAttribute('download', filename);
-      pom.click();
     },
 
     /**
@@ -230,10 +236,10 @@ export default {
           this.textSnackBar = 'Mauvais type de fichier importé';
       }
     },
-    async generateRandomRecipe(){
-      const recipe = await store.createRandomRecipe()
-      
-      this.exportFile('application/json', 'randomRecipe.json', recipe )
+    async generateRandomRecipe() {
+      const recipe = await recipeStore.createRandomRecipe()
+
+      this.exportFile('application/json', 'randomRecipe.json', recipe)
     }
   }
 }
@@ -241,13 +247,13 @@ export default {
 
 <style scoped>
 
-:deep(.v-file-input .v-input__control)  {
+:deep(.v-file-input .v-input__control) {
   height: 250px;
   text-align: center;
   vertical-align: middle;
 }
 
-:deep(.v-file-input .v-input__prepend)  {
+:deep(.v-file-input .v-input__prepend) {
   width: 0;
   height: 0;
 }
@@ -285,11 +291,9 @@ export default {
   border-radius: 100px;
 }
 
-.calculator-rapport-export-buttons button  {
+.calculator-rapport-export-buttons button {
   height: calc(var(--v-btn-height) + 12px);
   border-radius: 100px;
 }
-
-
 
 </style>

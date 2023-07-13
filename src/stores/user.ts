@@ -1,4 +1,3 @@
-// userStore.js
 import { defineStore } from "pinia";
 import axios from "axios";
 
@@ -9,34 +8,29 @@ export const useUserStore = defineStore("user", {
   actions: {
     async login(email: string, password: string) {
       try {
-        // Effectuez votre requête HTTP pour l'authentification
         const response = await axios.post(
           "http://localhost:3003/api/auth/login",
           { email, password },
           { withCredentials: true }
         );
-
-        // Stockez les informations utilisateur dans le store
-
         this.user = response.data.user;
+        // On stocke l'utilisateur dans le localStorage pour l'avoir partout dans notre application
+        // Car le store ce supprime dès que l'application est rechargée
         localStorage.setItem("user", JSON.stringify(response.data.user));
       } catch (error) {
-        // Gérez les erreurs de connexion ici
-        console.log(error);
-        console.error(error);
+        //TODO Gérez les erreurs de connexion ici
+        console.error('Erreur lors de la connexion : ' + error);
       }
     },
     async logout() {
       try {
-        // Effectuez votre requête HTTP pour la déconnexion
         await axios.post("http://localhost:3003/api/auth/logout");
-
-        // Réinitialisez les informations utilisateur dans le store
         this.user = undefined;
         localStorage.removeItem("user");
+
       } catch (error) {
-        // Gérez les erreurs de déconnexion ici
-        console.error(error);
+        //TODO Gérez les erreurs de déconnexion ici
+        console.error('Erreur lors de la deconnexion : ' + error);
       }
     },
     async register(
@@ -47,17 +41,14 @@ export const useUserStore = defineStore("user", {
       date: string
     ) {
       try {
-        // Effectuez votre requête HTTP pour l'inscription
         const response = await axios.post(
           "http://localhost:3003/api/auth/register",
           { email, password, firstName, lastName, date }
         );
-
-        // Stockez les informations utilisateur dans le store
         this.user = response.data.user;
       } catch (error) {
-        // Gérez les erreurs d'inscription ici
-        console.error(error);
+        //TODO Gérez les erreurs d'inscription
+        console.error('Erreur lors de l\'inscritpion : ' + error);
       }
     },
   },
