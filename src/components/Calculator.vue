@@ -27,7 +27,7 @@
 
         <v-row class="calculator-bouttons" align="center" justify="center">
           <v-col cols="auto">
-            <v-btn @click="handleImportRecipe('save')" color="success" elevation="4" rounded="sm" size="x-large">
+            <v-btn @click="handleImportRecipe('save')" color="success" elevation="4" rounded="sm" size="large">
               Enregistrer
               <v-tooltip
                 activator="parent"
@@ -37,7 +37,7 @@
           </v-col>
 
           <v-col cols="auto">
-            <v-btn @click="handleImportRecipe('analyse')" color="primary" elevation="4" rounded="sm" size="x-large">
+            <v-btn @click="handleImportRecipe('analyse')" color="primary" elevation="4" rounded="sm" size="large">
               Analyser
               <v-tooltip
                 activator="parent"
@@ -56,7 +56,7 @@
           </template>
 
           <div class="d-flex justify-center">
-            <h4>Calories <span style="color: red;">9000</span></h4>
+            <h4>Calories <span style="color: red;">{{analyzeRecipe.totalCalorique}}</span></h4>
             <v-icon color="red" icon="mdi-fire"/>
           </div>
 
@@ -65,17 +65,17 @@
           <h4>Macro nutriments</h4>
 
           <div class="my-3 d-flex justify-center">
-            <div>Proteins - <span style="color: brown;">9000 g</span></div>
+            <div>Proteins - <span style="color: brown;">{{analyzeRecipe.totalProtein}} g</span></div>
             <v-icon color="brown" icon="mdi-food-drumstick"/>
           </div>
 
           <div class="my-3 d-flex justify-center">
-            <div>Glucide - <span style="color: blue;">9000 g</span></div>
+            <div>Glucide - <span style="color: blue;">{{analyzeRecipe.totalGlucide}} g</span></div>
             <v-icon color="blue" icon="mdi-spoon-sugar"/>
           </div>
 
           <div class="my-3 d-flex justify-center">
-            <div>Lipide - <span style="color: yellowgreen;">9000 g</span></div>
+            <div>Lipide - <span style="color: yellowgreen;">{{analyzeRecipe.totalLipide}} g</span></div>
             <v-icon color="yellow" icon="mdi-water"/>
           </div>
 
@@ -99,7 +99,13 @@
         </div>
 
       </v-responsive>
-
+      <v-btn @click="generateRandomRecipe()" color="primary" elevation="4" rounded="sm" class="mt-2" size="large">
+        Recette aléatoire
+        <v-tooltip
+          activator="parent"
+          location="top"
+        >Générer une recette aléatoire</v-tooltip>
+      </v-btn>
       <div class="text-center ma-2">
         <v-snackbar
           v-model="displaySnackBar"
@@ -132,6 +138,7 @@ export default {
     jsonResult: {},
     displaySnackBar: false,
     textSnackBar: '',
+    analyzeRecipe: {},
   }),
   methods: {
     
@@ -161,6 +168,8 @@ export default {
         if (this.files[0].type === 'application/json') {
           this.jsonResult = await this.readFileJson(this.files[0])
           if (typeAction === 'analyse') {
+            this.analyzeRecipe = await store.analyzeRecipeObject(this.jsonResult)
+            console.log(this.analyzeRecipe)
             this.handleSnackBar(typeAction)
             this.displayAnalyseResult = !this.displayAnalyseResult
           } else if (typeAction === 'save') {
@@ -181,15 +190,22 @@ export default {
      * @param type
      * @param filename
      */
-    exportFile(type: string, filename: string) {
+    exportFile(type: string, filename: string, data?: Object) {
       // Create a BLOB
-      let blob = new Blob([JSON.stringify(this.jsonResult)], { type: 'application/json' });
-      let url = URL.createObjectURL(blob);
+      console.log(data)
+      let url = '';
+      if (data != null) {
+        let blob = new Blob([JSON.stringify(data)], { type: type });
+        url = URL.createObjectURL(blob);
+      } else {
+        let blob = new Blob([JSON.stringify(this.jsonResult)], { type: type });
+        url = URL.createObjectURL(blob);
+      }
 
       // Create a link to download it
       let pom = document.createElement('a');
       pom.href = url;
-      pom.setAttribute('download', 'export.json');
+      pom.setAttribute('download', filename);
       pom.click();
     },
 
@@ -214,6 +230,11 @@ export default {
           this.textSnackBar = 'Mauvais type de fichier importé';
       }
     },
+    async generateRandomRecipe(){
+      const recipe = await store.createRandomRecipe()
+      
+      this.exportFile('application/json', 'randomRecipe.json', recipe )
+    }
   }
 }
 </script>
