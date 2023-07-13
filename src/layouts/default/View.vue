@@ -7,5 +7,13 @@
 <script lang="ts">
   export default {
     name: "DefaultView",
+    setup() {
+      return {
+      
+      drawer: true,
+        rail: true,
+    };
+
+  }
   };
 </script>
