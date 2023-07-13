@@ -14,6 +14,11 @@
       <v-chip v-if="userStore.user._id == recipe.user._id" class="float-right" color="red"
               @click="deleteRecipe(recipe)">
         <v-icon class="px-2" icon="mdi-trash-can-outline" size="large"/>
+        <v-tooltip
+          activator="parent"
+          location="top"
+        >Supprimer la recette
+        </v-tooltip>
       </v-chip>
     </v-card-title>
 

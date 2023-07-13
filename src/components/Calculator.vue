@@ -66,24 +66,24 @@
           <h4>Macro nutriments</h4>
 
           <div class="my-3 d-flex justify-center">
-            <div>Proteins - <span style="color: brown;">{{ analyzeRecipe.totalProtein }} g</span></div>
+            <div>Proteins : <span style="color: brown;">{{ analyzeRecipe.totalProtein }} g</span></div>
             <v-icon color="brown" icon="mdi-food-drumstick"/>
           </div>
 
           <div class="my-3 d-flex justify-center">
-            <div>Glucide - <span style="color: blue;">{{ analyzeRecipe.totalGlucide }} g</span></div>
+            <div>Glucide : <span style="color: blue;">{{ analyzeRecipe.totalGlucide }} g</span></div>
             <v-icon color="blue" icon="mdi-spoon-sugar"/>
           </div>
 
           <div class="my-3 d-flex justify-center">
-            <div>Lipide - <span style="color: yellowgreen;">{{ analyzeRecipe.totalLipide }} g</span></div>
+            <div>Lipide : <span style="color: yellowgreen;">{{ analyzeRecipe.totalLipide }} g</span></div>
             <v-icon color="yellow" icon="mdi-water"/>
           </div>
 
         </v-card>
 
         <div class="calculator-rapport-export-buttons my-3">
-          <v-btn color="blue" @click="exportFile('application/json','export.json')">
+          <v-btn color="blue" @click="exportFile('application/json','analyse.json', analyzeRecipe)">
             <v-icon icon="mdi-code-json" size="x-large"/>
             <v-tooltip
               activator="parent"
@@ -91,7 +91,7 @@
             >Exporter le rapport d'analyse au format JSON
             </v-tooltip>
           </v-btn>
-          <v-btn color="green" @click="exportFile('data:text/csv;charset=utf-8,', 'export.json')">
+          <v-btn color="green" @click="exportFile('data:text/csv;charset=utf-8,', 'analyse.csv', analyzeRecipe)">
             <v-icon icon="mdi-file-excel" size="x-large"/>
             <v-tooltip
               activator="parent"
@@ -203,16 +203,17 @@ export default {
      * @param filename
      * @param data
      */
-    exportFile(type: string, filename: string, data?: Object) {
-      let url = '';
-      if (data != null) {
-        // Create a BLOB
-        let blob = new Blob([JSON.stringify(data)], {type: type});
-        url = URL.createObjectURL(blob);
-      } else {
-        let blob = new Blob([JSON.stringify(this.jsonResultFileImport)], {type: type});
-        url = URL.createObjectURL(blob);
-      }
+    exportFile(type: string, filename: string, data) {
+      // Create a BLOB
+      console.log(data)
+      let blob = new Blob([JSON.stringify(data)], {type: type});
+      let url = URL.createObjectURL(blob);
+
+      // Création du lien de téléchargement
+      let link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename);
+      link.click();
     },
 
     /**
@@ -238,7 +239,6 @@ export default {
     },
     async generateRandomRecipe() {
       const recipe = await recipeStore.createRandomRecipe()
-
       this.exportFile('application/json', 'randomRecipe.json', recipe)
     }
   }

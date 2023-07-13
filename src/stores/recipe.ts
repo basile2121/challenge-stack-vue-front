@@ -39,7 +39,7 @@ export const useRecipeStore = defineStore("recipe", {
           {withCredentials: true}
         );
       } catch (error) {
-        console.error("Erreur lors de la mise à jour de la recette : ", error);
+        console.error("Erreur lors de la suppresion de la recette : ", error);
         return error;
       }
     },
@@ -58,7 +58,7 @@ export const useRecipeStore = defineStore("recipe", {
     async createRandomRecipe() {
       try {
         const response = await axios.get(
-          "API_URL + /api/recipes/random/create/",
+          API_URL + "/api/recipes/random/create/",
           { withCredentials: true }
         );
 
