@@ -32,10 +32,6 @@ const routes = [
         path: "register",
         component: () => import("@/views/register.vue"),
       },
-      {
-        path: 'profil',
-        component: () => import('@/views/profil.vue'),
-      },
     ],
   },
   {
